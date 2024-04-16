@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:amazonportas/second_screen.dart';
+import 'package:amazonportas/transition_screen.dart';
+// https://www.freecodecamp.org/news/how-to-build-a-simple-login-app-with-flutter/
 
 void main() {
   runApp(MyApp());
 }
 
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return Login();
+        },
+        routes: <RouteBase>[
+          GoRoute(
+            path: 'secondscreen',
+            pageBuilder: TransitionScreen.transition(SecondScreen()),
+            builder: (BuildContext context, GoRouterState state) {
+              return SecondScreen();
+            },
+          ),
+        ]),
+  ],
+);
+
+/*
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
@@ -35,7 +58,7 @@ final GoRouter _router = GoRouter(
           ),
         ]),
   ],
-);
+);*/
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -87,25 +110,6 @@ class Login extends StatelessWidget {
                   child: const Text("Acessar"))
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class SecondScreen extends StatelessWidget {
-  SecondScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Route'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go('/'),
-          child: const Text('Go back!'),
         ),
       ),
     );
