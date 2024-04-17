@@ -27,39 +27,6 @@ final GoRouter _router = GoRouter(
   ],
 );
 
-/*
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return Login();
-        },
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'secondscreen',
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return CustomTransitionPage(
-                  child: SecondScreen(),
-                  transitionsBuilder: (BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnaminaion,
-                      Widget child) {
-                    return FadeTransition(
-                      opacity: CurveTween(curve: Curves.bounceInOut)
-                          .animate(animation),
-                      child: child,
-                    );
-                  });
-            },
-            builder: (BuildContext context, GoRouterState state) {
-              return SecondScreen();
-            },
-          ),
-        ]),
-  ],
-);*/
-
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
@@ -71,8 +38,31 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
+  final loginController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loginController.addListener(() {});
+    passwordController.addListener(() {});
+  }
+
+  @override
+  void dispose() {
+    loginController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,32 +73,61 @@ class Login extends StatelessWidget {
             left: 70,
             right: 70,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Image.asset("assets/amazonportas.png"),
-              const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Login",
-                ),
-              ),
-              const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Senha",
-                ),
-              ),
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.blueGrey,
-                    padding: const EdgeInsets.all(16.0),
-                    textStyle: const TextStyle(fontSize: 20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Image.asset("assets/amazonportas.png"),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Login",
                   ),
-                  onPressed: () => context.go('/secondscreen'),
-                  child: const Text("Acessar"))
-            ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Por favor, digite um login valido";
+                    }
+                    return null;
+                  },
+                  controller: loginController,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Senha",
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Por favor, digite uma senha valida";
+                    }
+                    return null;
+                  },
+                  controller: passwordController,
+                  obscureText: true,
+                ),
+                ElevatedButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.blueGrey,
+                      padding: const EdgeInsets.all(16.0),
+                      textStyle: const TextStyle(fontSize: 20.0),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate() &&
+                          loginController.text == "eron" &&
+                          passwordController.text == "eron123") {
+                        loginController.clear();
+                        passwordController.clear();
+                        context.go('/secondscreen');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Acesso Negado")));
+                      }
+                    },
+                    child: const Text("Acessar"))
+              ],
+            ),
           ),
         ),
       ),
