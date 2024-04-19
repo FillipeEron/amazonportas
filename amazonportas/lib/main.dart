@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:amazonportas/second_screen.dart';
+import 'package:amazonportas/doc_saida.dart';
 import 'package:amazonportas/transition_screen.dart';
 // https://www.freecodecamp.org/news/how-to-build-a-simple-login-app-with-flutter/
 
@@ -13,14 +13,14 @@ final GoRouter _router = GoRouter(
     GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return Login();
+          return const Login();
         },
         routes: <RouteBase>[
           GoRoute(
-            path: 'secondscreen',
-            pageBuilder: TransitionScreen.transition(SecondScreen()),
+            path: 'doc_saida',
+            pageBuilder: TransitionScreen.transition(const DocSaida()),
             builder: (BuildContext context, GoRouterState state) {
-              return SecondScreen();
+              return const DocSaida();
             },
           ),
         ]),
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
 }
 
 class Login extends StatefulWidget {
-  Login({super.key});
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -53,8 +53,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    loginController.addListener(() {});
-    passwordController.addListener(() {});
+    //loginController.addListener(() {});
+    //passwordController.addListener(() {});
   }
 
   @override
@@ -108,24 +108,25 @@ class _LoginState extends State<Login> {
                   obscureText: true,
                 ),
                 ElevatedButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.all(16.0),
-                      textStyle: const TextStyle(fontSize: 20.0),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate() &&
-                          loginController.text == "eron" &&
-                          passwordController.text == "eron123") {
-                        loginController.clear();
-                        passwordController.clear();
-                        context.go('/secondscreen');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Acesso Negado")));
-                      }
-                    },
-                    child: const Text("Acessar"))
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.blueGrey,
+                    padding: const EdgeInsets.all(16.0),
+                    textStyle: const TextStyle(fontSize: 20.0),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate() &&
+                        loginController.text == "eron" &&
+                        passwordController.text == "eron123") {
+                      loginController.clear();
+                      passwordController.clear();
+                      context.go('/doc_saida');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Acesso Negado")));
+                    }
+                  },
+                  child: const Text("Acessar"),
+                )
               ],
             ),
           ),
