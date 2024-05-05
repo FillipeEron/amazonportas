@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:amazonportas/tiny_api_docsaida.dart';
+
+// https://medium.com/@ashishpimpre/how-to-fetch-data-from-an-api-and-display-it-in-listview-in-flutter-770863f85959
+// https://blog.flutterando.com.br/futurebuilder-do-jeito-certo-8ae47159cd5f
+// https://codeforgeek.com/flutter-fetch-data-from-rest-api/
 
 class DocSaida extends StatefulWidget {
   const DocSaida({super.key});
@@ -10,11 +15,13 @@ class DocSaida extends StatefulWidget {
 class _DocSaidaState extends State<DocSaida> {
   final _formKey = GlobalKey<FormState>();
   final pedidoController = TextEditingController();
+  late Future<String>? _codigoPedido;
 
   @override
   void initState() {
     super.initState();
     pedidoController.addListener(() {});
+    _codigoPedido = TinyAPIDocSaida.getIdfromAPI('111');
   }
 
   @override
@@ -57,13 +64,14 @@ class _DocSaidaState extends State<DocSaida> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          /*showDialog(
+                          showDialog(
                               context: context,
                               builder: (builder) {
-                                return AlertDialog(
-                                  content: Text(pedidoController.text),
+                                return const AlertDialog(
+                                  content: Text(_codigoPedido ??
+                                      "Retorno do código do pedido falhou"),
                                 );
-                              });*/
+                              });
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text("Algo deu errado")));
