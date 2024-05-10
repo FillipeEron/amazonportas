@@ -4,47 +4,33 @@ import 'dart:convert' as convert;
 const String _token = '3bafd53e2da95f4bd72afb6874d0e563f90b54bf';
 const String _format = 'json';
 
-class TinyAPIDocSaida {
-  //static const String _token = '3bafd53e2da95f4bd72afb6874d0e563f90b54bf';
-  //static const String _format = 'json';
-  final String? _idPedido;
-  String? _codigoPedido;
+class Info {
+  final String razaoSocial;
 
-  TinyAPIDocSaida(this._idPedido);
+  const Info({
+    required this.razaoSocial,
+  });
 
-  void loadPedido() async {
-    try {
-      var url = Uri.parse('https://api.tiny.com.br/api2/pedidos.pesquisa.php')
-          .replace(queryParameters: {
-        'token': _token,
-        'formato': _format,
-        'numero': _idPedido,
-      });
+  factory Info.fromJson(Map<String, dynamic> json) {
+    final String razaoSocial =
+        json['retorno']['conta']['razao_social'] as String;
 
-      var response = await http.post(url);
-      var data = convert.jsonDecode(response.body);
-      _codigoPedido = data['retorno']['pedidos'][0]['pedido']['id'] as String;
-    } catch (e) {
-      throw 'GET ID FAIL';
-    }
+    return Info(razaoSocial: razaoSocial);
   }
+}
 
-  static Future<String> getIdfromAPI(String idPedido) async {
-    try {
-      var url = Uri.parse('https://api.tiny.com.br/api2/pedidos.pesquisa.php')
-          .replace(queryParameters: {
-        'token': _token,
-        'formato': _format,
-        'numero': idPedido,
-      });
+Future<Info> fetchInformation() async {
+  final url = Uri.parse('https://api.tiny.com.br/api2/info.php')
+      .replace(queryParameters: {
+    'token': _token,
+    'formato': _format,
+  });
 
-      var response = await http.post(url);
-      var data = convert.jsonDecode(response.body);
-      return data['retorno']['pedidos'][0]['pedido']['id'] as String;
-    } catch (e) {
-      throw 'GET ID FAIL';
-    }
+  final response = await http.post(url);
+  if (response.statusCode == 200) {
+    return Info.fromJson(
+        convert.jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    throw Exception('FAILED REQUEST: STATUS CODE $response.statusCode');
   }
-
-  get codigoPedido => _codigoPedido;
 }

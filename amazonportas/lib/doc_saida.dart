@@ -15,13 +15,14 @@ class DocSaida extends StatefulWidget {
 class _DocSaidaState extends State<DocSaida> {
   final _formKey = GlobalKey<FormState>();
   final pedidoController = TextEditingController();
-  late Future<String>? _codigoPedido;
+  late Future<Info> info;
 
   @override
   void initState() {
     super.initState();
     pedidoController.addListener(() {});
-    _codigoPedido = TinyAPIDocSaida.getIdfromAPI('111');
+    info = fetchInformation();
+    //_codigoPedido = TinyAPIDocSaida.getIdfromAPI('111');
   }
 
   @override
@@ -30,6 +31,29 @@ class _DocSaidaState extends State<DocSaida> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Doc Saida'),
+      ),
+      body: Center(
+        child: FutureBuilder<Info>(
+          future: info,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.razaoSocial);
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
+      ),
+    );
+  }
+
+  /*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +92,7 @@ class _DocSaidaState extends State<DocSaida> {
                               context: context,
                               builder: (builder) {
                                 return const AlertDialog(
-                                  content: Text(_codigoPedido ??
+                                  content: Text(
                                       "Retorno do código do pedido falhou"),
                                 );
                               });
@@ -83,5 +107,5 @@ class _DocSaidaState extends State<DocSaida> {
                 ),
               ))),
     );
-  }
+  }*/
 }
