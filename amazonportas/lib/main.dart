@@ -8,13 +8,16 @@ void main() {
   runApp(MyApp());
 }
 
+/* 
+builder: (BuildContext context, GoRouterState state) {
+          return const Login();
+        }
+*/
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
         path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return const Login();
-        },
+        builder: (context, state) => const Login(),
         routes: <RouteBase>[
           GoRoute(
             path: 'doc_saida',
