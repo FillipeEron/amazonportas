@@ -4,15 +4,8 @@ import 'package:amazonportas/doc_saida.dart';
 import 'package:amazonportas/transition_screen.dart';
 // https://www.freecodecamp.org/news/how-to-build-a-simple-login-app-with-flutter/
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
-/* 
-builder: (BuildContext context, GoRouterState state) {
-          return const Login();
-        }
-*/
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
@@ -22,9 +15,7 @@ final GoRouter _router = GoRouter(
           GoRoute(
             path: 'doc_saida',
             pageBuilder: TransitionScreen.transition(const DocSaida()),
-            builder: (BuildContext context, GoRouterState state) {
-              return const DocSaida();
-            },
+            builder: (context, state) => const DocSaida(),
           ),
         ]),
   ],
