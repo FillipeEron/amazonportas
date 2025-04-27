@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:amazonportas/doc_saida.dart';
 import 'package:amazonportas/transition_screen.dart';
-// https://www.freecodecamp.org/news/how-to-build-a-simple-login-app-with-flutter/
 
 void main() => runApp(MyApp());
 

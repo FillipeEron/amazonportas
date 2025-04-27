@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:amazonportas/tiny_api_docsaida.dart';
 
-// https://medium.com/@ashishpimpre/how-to-fetch-data-from-an-api-and-display-it-in-listview-in-flutter-770863f85959
-// https://blog.flutterando.com.br/futurebuilder-do-jeito-certo-8ae47159cd5f
-// https://codeforgeek.com/flutter-fetch-data-from-rest-api/
-
 class DocSaida extends StatefulWidget {
   const DocSaida({super.key});
 
@@ -15,14 +11,15 @@ class DocSaida extends StatefulWidget {
 class _DocSaidaState extends State<DocSaida> {
   final _formKey = GlobalKey<FormState>();
   final pedidoController = TextEditingController();
-  late Future<Info> info;
+  //late Future<Info> info;
+  late Future<String> cliente;
 
   @override
   void initState() {
     super.initState();
     pedidoController.addListener(() {});
-    info = fetchInformation();
-    //_codigoPedido = TinyAPIDocSaida.getIdfromAPI('111');
+    //cliente = getClientNameFromAPI('1000');
+    //info = fetchInformation();
   }
 
   @override
@@ -31,18 +28,18 @@ class _DocSaidaState extends State<DocSaida> {
     super.dispose();
   }
 
-  @override
+  /*@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Doc Saida'),
       ),
       body: Center(
-        child: FutureBuilder<Info>(
-          future: info,
+        child: FutureBuilder(
+          future: cliente,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data!.razaoSocial);
+              return Text(snapshot.data!);
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -51,9 +48,8 @@ class _DocSaidaState extends State<DocSaida> {
         ),
       ),
     );
-  }
+  }*/
 
-  /*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,9 +87,19 @@ class _DocSaidaState extends State<DocSaida> {
                           showDialog(
                               context: context,
                               builder: (builder) {
-                                return const AlertDialog(
-                                  content: Text(
-                                      "Retorno do código do pedido falhou"),
+                                return AlertDialog(
+                                  content: FutureBuilder(
+                                    future: getClientNameFromAPI(
+                                        pedidoController.value.text),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(snapshot.data!);
+                                      } else if (snapshot.hasError) {
+                                        return Text('${snapshot.error}');
+                                      }
+                                      return const CircularProgressIndicator();
+                                    },
+                                  ),
                                 );
                               });
                         } else {
@@ -107,5 +113,5 @@ class _DocSaidaState extends State<DocSaida> {
                 ),
               ))),
     );
-  }*/
+  }
 }

@@ -34,3 +34,21 @@ Future<Info> fetchInformation() async {
     throw Exception('FAILED REQUEST: STATUS CODE $response.statusCode');
   }
 }
+
+Future<String> getClientNameFromAPI(String idPedido) async {
+  var data;
+  try {
+    var url = Uri.parse('https://api.tiny.com.br/api2/pedidos.pesquisa.php')
+        .replace(queryParameters: {
+      'token': _token,
+      'formato': _format,
+      'numero': idPedido,
+    });
+
+    var response = await http.post(url);
+    data = convert.jsonDecode(response.body);
+  } catch (e) {
+    throw 'GET CLIENT NAME FAIL';
+  }
+  return data['retorno']['pedidos'][0]['pedido']['nome'] as String;
+}
